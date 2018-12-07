@@ -1684,7 +1684,7 @@ open class MediaBrowser: UIViewController, UIScrollViewDelegate, UIActionSheetDe
 
         let video = mediaAtIndex(index: index)
         
-        let headerFields: [String: String] = ["Authorization": video?.additionalHeaders ?? [:]
+        let headerFields: [String: String] = ["Authorization": video?.additionalHeaders ?? [:]]
         let urlAsset = AVURLAsset(url: videoURL, options: ["AVURLAssetHTTPHeaderFieldsKey": headerFields])
         let playerItem = AVPlayerItem(asset: urlAsset)
         currentVideoPlayerViewController.player = AVPlayer(playerItem: playerItem)
