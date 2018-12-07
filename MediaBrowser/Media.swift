@@ -44,6 +44,8 @@ open class Media: NSObject {
     private var operation: SDWebImageOperation?
     private var assetRequestID = PHInvalidImageRequestID
     
+    var additionalHeaders: [String: String] = [:]
+    
     //MARK: - Init
     /// init
     public override init() {}
@@ -191,6 +193,10 @@ open class Media: NSObject {
 
     // Load from local file
     private func performLoadUnderlyingImageAndNotifyWithWebURL(url: URL) {
+        
+        for header in additionalHeaders {
+            SDWebImageManager.shared().setValue(header.value, forKey: header.key)
+        }
         operation = SDWebImageManager.shared().loadImage(with: url, options: [], progress: { (receivedSize, expectedSize, targetURL) in
             let dict = [
             "progress" : min(1.0, CGFloat(receivedSize)/CGFloat(expectedSize)),
