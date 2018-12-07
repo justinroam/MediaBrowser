@@ -1682,18 +1682,12 @@ open class MediaBrowser: UIViewController, UIScrollViewDelegate, UIActionSheetDe
     func playVideo(videoURL: URL, atPhotoIndex index: Int) {
         // Setup player
 
-        if let accessToken = delegate?.accessToken(for: videoURL) {
-            let headerFields: [String: String] = ["Authorization": accessToken]
-            let urlAsset = AVURLAsset(url: videoURL, options: ["AVURLAssetHTTPHeaderFieldsKey": headerFields])
-            let playerItem = AVPlayerItem(asset: urlAsset)
-            currentVideoPlayerViewController.player = AVPlayer(playerItem: playerItem)
-        } else if let headers = delegate?.additionalHeaders() {
-            let urlAsset = AVURLAsset(url: videoURL, options: ["AVURLAssetHTTPHeaderFieldsKey": headers])
-            let playerItem = AVPlayerItem(asset: urlAsset)
-            currentVideoPlayerViewController.player = AVPlayer(playerItem: playerItem)
-        } else {
-            currentVideoPlayerViewController.player = AVPlayer(url: videoURL)
-        }
+        let video = mediaAtIndex(index: index)
+        
+        let headerFields: [String: String] = ["Authorization": video?.additionalHeaders ?? [:]
+        let urlAsset = AVURLAsset(url: videoURL, options: ["AVURLAssetHTTPHeaderFieldsKey": headerFields])
+        let playerItem = AVPlayerItem(asset: urlAsset)
+        currentVideoPlayerViewController.player = AVPlayer(playerItem: playerItem)
 
         if #available(iOS 9.0, *) {
             currentVideoPlayerViewController.allowsPictureInPicturePlayback = false
