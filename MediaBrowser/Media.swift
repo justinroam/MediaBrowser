@@ -138,7 +138,7 @@ open class Media: NSObject {
     }
 
     //MARK: - Photo Protocol Methods
-    func loadUnderlyingImageAndNotify() {
+    func loadUnderlyingImageAndNotify(headers: [String: String]? = nil) {
         assert(Thread.current.isMainThread, "This method must be called on the main thread.")
         
         if loadingInProgress {
@@ -151,7 +151,7 @@ open class Media: NSObject {
             if underlyingImage != nil {
                 imageLoadingComplete()
             } else {
-                performLoadUnderlyingImageAndNotify()
+                performLoadUnderlyingImageAndNotify(headers: headers)
             }
         //}
         //catch (NSException exception) {
@@ -162,7 +162,7 @@ open class Media: NSObject {
     }
 
     // Set the underlyingImage
-    func performLoadUnderlyingImageAndNotify() {
+    func performLoadUnderlyingImageAndNotify(headers: [String: String]? = nil) {
         // Get underlying image
         if let img = image {
             // We have UIImage!
@@ -178,7 +178,7 @@ open class Media: NSObject {
                 performLoadUnderlyingImageAndNotifyWithLocalFileURL(url: purl)
             } else {
                 // Load async from web (using SDWebImage)
-                performLoadUnderlyingImageAndNotifyWithWebURL(url: purl)
+                performLoadUnderlyingImageAndNotifyWithWebURL(url: purl, headers: headers)
             }
         } else if let a = asset {
             // Load from photos asset
@@ -190,7 +190,14 @@ open class Media: NSObject {
     }
 
     // Load from local file
-    private func performLoadUnderlyingImageAndNotifyWithWebURL(url: URL) {
+    private func performLoadUnderlyingImageAndNotifyWithWebURL(url: URL, headers: [String: String]? = nil) {
+        
+        if let headers = headers {
+            for header in headers {
+                 SDWebImageManager.shared().setValue(header.value, forKey: header.key)
+            }
+        }
+        
         operation = SDWebImageManager.shared().loadImage(with: url, options: [], progress: { (receivedSize, expectedSize, targetURL) in
             let dict = [
             "progress" : min(1.0, CGFloat(receivedSize)/CGFloat(expectedSize)),

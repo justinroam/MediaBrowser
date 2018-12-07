@@ -1687,6 +1687,10 @@ open class MediaBrowser: UIViewController, UIScrollViewDelegate, UIActionSheetDe
             let urlAsset = AVURLAsset(url: videoURL, options: ["AVURLAssetHTTPHeaderFieldsKey": headerFields])
             let playerItem = AVPlayerItem(asset: urlAsset)
             currentVideoPlayerViewController.player = AVPlayer(playerItem: playerItem)
+        } else if let headers = delegate?.additionalHeaders() {
+            let urlAsset = AVURLAsset(url: videoURL, options: ["AVURLAssetHTTPHeaderFieldsKey": headers])
+            let playerItem = AVPlayerItem(asset: urlAsset)
+            currentVideoPlayerViewController.player = AVPlayer(playerItem: playerItem)
         } else {
             currentVideoPlayerViewController.player = AVPlayer(url: videoURL)
         }

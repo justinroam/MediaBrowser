@@ -106,6 +106,11 @@ public protocol MediaBrowserDelegate: class {
      Optional protocol for access token
      */
     func accessToken(for url: URL?) -> String?
+    
+    /**
+     Optional protocol for additional headers
+     */
+    func additionalHeaders() -> [String: String]?
 }
 
 public extension MediaBrowserDelegate {
@@ -130,4 +135,6 @@ public extension MediaBrowserDelegate {
     func gridCellSize() -> CGSize? { return nil }
 
     func accessToken(for url: URL?) -> String? { return nil }
+    
+    func additionalHeaders() -> [String: String]? { return nil }
 }
