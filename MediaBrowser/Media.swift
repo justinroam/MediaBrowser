@@ -44,7 +44,7 @@ open class Media: NSObject {
     private var operation: SDWebImageOperation?
     private var assetRequestID = PHInvalidImageRequestID
     
-    var additionalHeaders: [String: String] = [:]
+    private var additionalHeaders: [String: String] = [:]
     
     //MARK: - Init
     /// init
@@ -72,9 +72,10 @@ open class Media: NSObject {
     }
 
     /// init with image url
-    public convenience init(url: URL) {
+    public convenience init(url: URL, additionalHeaders: [String: String] = [:]) {
         self.init()
         self.photoURL = url
+        self.additionalHeaders = additionalHeaders
     }
 
     /// init with PHAsset and targetSize
@@ -87,13 +88,14 @@ open class Media: NSObject {
     }
     
     /// init with video URL
-    public convenience init(videoURL: URL, previewImageURL: URL? = nil) {
+    public convenience init(videoURL: URL, previewImageURL: URL? = nil, additionalHeaders: [String: String] = [:]) {
         self.init()
     
         self.videoURL = videoURL
         isVideo = true
         emptyImage = (previewImageURL == nil) ? true : false
         self.photoURL = previewImageURL
+        self.additionalHeaders = additionalHeaders
     }
 
     //MARK: - Video
